@@ -1,4 +1,4 @@
-package dev.czajor.bluetoothManager.object;
+package dev.czajor.bluetoothmanager.object;
 
 import lombok.Builder;
 import lombok.Value;

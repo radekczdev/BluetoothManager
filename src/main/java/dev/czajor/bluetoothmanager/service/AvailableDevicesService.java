@@ -1,6 +1,6 @@
-package dev.czajor.bluetoothManager.service;
+package dev.czajor.bluetoothmanager.service;
 
-import dev.czajor.bluetoothManager.object.Device;
+import dev.czajor.bluetoothmanager.object.Device;
 import tinyb.BluetoothDevice;
 import tinyb.BluetoothManager;
 
