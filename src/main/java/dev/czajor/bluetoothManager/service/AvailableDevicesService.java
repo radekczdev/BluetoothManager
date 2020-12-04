@@ -9,18 +9,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ConnectedDevicesService {
+public class AvailableDevicesService {
     public static List<Device> getAll(BluetoothManager manager) {
-//        BluetoothManager manager = BluetoothManager.getBluetoothManager();
-//        BluetoothDevice sensor = null;
-//        for (int i = 0; (i < 15) && running; ++i) {
         return Optional.ofNullable(manager.getDevices()).orElse(Collections.emptyList()).stream()
                 .map(dev -> Device.builder()
                         .device(dev).build())
                 .collect(Collectors.toList());
-//            if (list == null)
-//                return null;
-//
-//            Optional<BluetoothDevice> device = list.stream().filter(a -> a.getName().contains("Samsung 7 Series")).findFirst();
+    }
+
+    public static void printDeviceInformation(BluetoothDevice device) {
+        System.out.println("Address = " + device.getAddress());
+        System.out.println(" Name = " + device.getName());
+        System.out.println(" Class = " + device.getBluetoothClass());
+        System.out.println(" Type = " + device.getBluetoothType());
+        System.out.println(" Connected = " + device.getConnected());
+        System.out.println();
     }
 }
