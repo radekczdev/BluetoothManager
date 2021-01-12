@@ -1,27 +1,41 @@
 package dev.czajor.bluetoothmanager.service;
 
-import dev.czajor.bluetoothmanager.object.Device;
-import tinyb.BluetoothDevice;
-import tinyb.BluetoothManager;
+import dev.czajor.bluetoothmanager.domain.Device;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
+@RequiredArgsConstructor
 public class AvailableDevicesService {
-    public static List<Device> getAll(BluetoothManager manager) {
-        return Optional.ofNullable(manager.getDevices()).orElse(Collections.emptyList()).stream()
-                .map(dev -> Device.builder()
-                        .device(dev).build())
-                .collect(Collectors.toList());
+    private final TinyBInitializer tinyBInitializer;
+
+    public List<Device> getAll() {
+        List<Device> devices;
+        try {
+            tinyBInitializer.startDiscovery();
+            devices = Optional.ofNullable(tinyBInitializer.getDevices()).orElse(Collections.emptyList()).stream()
+                    .map(dev -> new Device(dev,
+                            dev.getName(),
+                            dev.getAddress(),
+                            dev.getBluetoothClass(),
+                            dev.getBluetoothType().name()))
+                    .collect(Collectors.toList());
+        } finally {
+            tinyBInitializer.stopDiscovery();
+        }
+        return devices;
     }
 
-    public static void printDeviceInformation(BluetoothDevice device) {
+    public void printDeviceInformation(Device device) {
         System.out.println("Address = " + device.getAddress());
         System.out.println(" Name = " + device.getName());
-        System.out.println(" Class = " + device.getBluetoothClass());
-        System.out.println(" Type = " + device.getBluetoothType());
+        System.out.println(" Class = " + device.getClass());
+        System.out.println(" Type = " + device.getType());
         System.out.println(" Connected = " + device.getConnected());
         System.out.println();
     }

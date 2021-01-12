@@ -1,14 +1,16 @@
 package dev.czajor.bluetoothmanager.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@Getter
+@Setter
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class DeviceDto {
-    String name;
-    String address;
-    String devClass;
-    String connected;
-    String type;
+   private String name;
+   private String address;
+   private String devClass;
+   private String connected;
+   private String type;
 }

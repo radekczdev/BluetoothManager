@@ -2,7 +2,7 @@ package dev.czajor.bluetoothmanager.config;
 
 import dev.czajor.bluetoothmanager.mapper.DeviceMapper;
 import dev.czajor.bluetoothmanager.model.DeviceDto;
-import dev.czajor.bluetoothmanager.object.LoadedDevice;
+import dev.czajor.bluetoothmanager.domain.Device;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +12,7 @@ import tinyb.BluetoothDevice;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-class DeviceLoadedDeviceDtoMapperTest {
+class DeviceDeviceDtoMapperTest {
     @Autowired
     private DeviceMapper mapper; //= Mappers.getMapper(DeviceMapperInterface.class);
 
@@ -21,7 +21,7 @@ class DeviceLoadedDeviceDtoMapperTest {
 
     @Test
     public void mapToDevice() {
-        LoadedDevice device = new LoadedDevice(
+        Device device = new Device(
                 bluetoothDevice,
                 "address",
                 "devClass",

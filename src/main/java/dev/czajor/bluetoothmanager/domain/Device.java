@@ -1,15 +1,14 @@
-package dev.czajor.bluetoothmanager.object;
+package dev.czajor.bluetoothmanager.domain;
 
 import lombok.*;
-import org.springframework.stereotype.Component;
 import tinyb.BluetoothDevice;
 
 @Getter
-@Setter
+//@Setter
 @EqualsAndHashCode
-@Component
+//@Component
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Device {
     private BluetoothDevice bluetoothDevice;
     private String name;
