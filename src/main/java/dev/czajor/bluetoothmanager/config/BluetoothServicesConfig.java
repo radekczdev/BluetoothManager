@@ -10,7 +10,7 @@ import tinyb.BluetoothManager;
 @Configuration
 public class BluetoothServicesConfig {
 
-    @Bean
+    @Bean(value = "bluetoothManager")
     public BluetoothManager bluetoothManager() {
         return BluetoothManager.getBluetoothManager();
     }
