@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ public class AvailableDevicesService {
         try {
             tinyBInitializer.startDiscovery();
             devices = Optional.ofNullable(tinyBInitializer.getDevices()).orElse(Collections.emptyList()).stream()
+                    .filter(Objects::nonNull)
                     .map(dev -> new Device(dev,
                             dev.getName(),
                             dev.getAddress(),
