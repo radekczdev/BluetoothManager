@@ -2,21 +2,23 @@ package dev.czajor.bluetoothmanager.service;
 
 import dev.czajor.bluetoothmanager.domain.Device;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import tinyb.BluetoothException;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AvailableDevicesService {
     private final TinyBInitializer tinyBInitializer;
+    Logger logger = LoggerFactory.getLogger(AvailableDevicesService.class);
 
     public List<Device> getAll() {
-        List<Device> devices;
+        List<Device> devices = new ArrayList<>();
         try {
             tinyBInitializer.startDiscovery();
             devices = Optional.ofNullable(tinyBInitializer.getDevices()).orElse(Collections.emptyList()).stream()
@@ -27,7 +29,10 @@ public class AvailableDevicesService {
                             dev.getBluetoothClass(),
                             dev.getBluetoothType().name()))
                     .collect(Collectors.toList());
-        } finally {
+        } catch (BluetoothException exception) {
+            logger.error("Error: ", exception);
+        }
+        finally {
             tinyBInitializer.stopDiscovery();
         }
         return devices;

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tinyb.BluetoothDevice;
+import tinyb.BluetoothException;
 import tinyb.BluetoothManager;
 
 import java.util.List;
@@ -19,15 +20,15 @@ public class TinyBInitializer {
 //        this.bluetoothManager = BluetoothManager.getBluetoothManager();
 //    }
 
-    public boolean startDiscovery() {
+    public boolean startDiscovery() throws BluetoothException {
         return bluetoothManager.startDiscovery();
     }
 
-    public void stopDiscovery() {
+    public void stopDiscovery() throws BluetoothException {
         bluetoothManager.stopDiscovery();
     }
 
-    public List<BluetoothDevice> getDevices() {
+    public List<BluetoothDevice> getDevices() throws BluetoothException {
         return bluetoothManager.getDevices();
     }
 }
