@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import tinyb.BluetoothDevice;
 import tinyb.BluetoothException;
 
 import java.util.*;
@@ -20,8 +21,11 @@ public class AvailableDevicesService {
     public List<Device> getAll() {
         List<Device> devices = new ArrayList<>();
         try {
+            logger.info("Starting to search devices...");
             tinyBInitializer.startDiscovery();
-            devices = Optional.ofNullable(tinyBInitializer.getDevices()).orElse(Collections.emptyList()).stream()
+            List<BluetoothDevice> devicesRaw = Optional.ofNullable(tinyBInitializer.getDevices()).orElse(Collections.emptyList());
+            logger.info("Found " + devicesRaw.size() + " devices");
+            devices = devicesRaw.stream()
                     .filter(Objects::nonNull)
                     .map(dev -> new Device(dev,
                             dev.getName(),
