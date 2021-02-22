@@ -2,7 +2,6 @@ package dev.czajor.bluetoothmanager.service;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tinyb.BluetoothDevice;
 import tinyb.BluetoothException;
@@ -17,10 +16,9 @@ import java.util.List;
 public class TinyBInitializer {
     private BluetoothManager bluetoothManager;
 
-    @Autowired
-    public TinyBInitializer(BluetoothManager bluetoothManager) {
-        this.bluetoothManager = bluetoothManager;
-    }
+//    public TinyBInitializer() {
+//        this.bluetoothManager = BluetoothManager.getBluetoothManager();
+//    }
 
     public boolean startDiscovery() throws BluetoothException {
         return bluetoothManager.startDiscovery();
