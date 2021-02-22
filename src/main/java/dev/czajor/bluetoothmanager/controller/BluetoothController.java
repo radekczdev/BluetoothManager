@@ -5,7 +5,6 @@ import dev.czajor.bluetoothmanager.mapper.DeviceMapper;
 import dev.czajor.bluetoothmanager.model.DeviceDto;
 import dev.czajor.bluetoothmanager.service.AvailableDevicesService;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 public class BluetoothController {
     private final AvailableDevicesService availableDevicesService;
-    private final DeviceMapper mapper = Mappers.getMapper(DeviceMapper.class);
+    private final DeviceMapper mapper;//= Mappers.getMapper(DeviceDeviceDtoMapper.DeviceDeviceDtoMapper.class);
 
     @GetMapping(value = "/devices",
             produces = APPLICATION_JSON_VALUE)
@@ -49,8 +48,6 @@ public class BluetoothController {
         } finally {
             lock.unlock();
         }
-        return mapper.mapToDevices(devices);
+        return mapper.mapToDeviceDtos(devices);
     }
-
-
 }

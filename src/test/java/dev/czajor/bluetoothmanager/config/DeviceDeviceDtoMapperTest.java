@@ -1,11 +1,9 @@
 package dev.czajor.bluetoothmanager.config;
 
 import dev.czajor.bluetoothmanager.mapper.DeviceMapper;
-import dev.czajor.bluetoothmanager.mapper.DeviceMapperInterface;
 import dev.czajor.bluetoothmanager.model.DeviceDto;
 import dev.czajor.bluetoothmanager.domain.Device;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 class DeviceDeviceDtoMapperTest {
     @Autowired
-    private DeviceMapper mapper = Mappers.getMapper(DeviceMapper.class);
+    private DeviceMapper mapper; //= Mappers.getMapper(DeviceMapperInterface.class);
 
     @MockBean
     private BluetoothDevice bluetoothDevice;
