@@ -1,5 +1,6 @@
 package dev.czajor.bluetoothmanager.repository;
 
+import com.hazelcast.core.HazelcastInstance;
 import dev.czajor.bluetoothmanager.domain.Device;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class DevicesRepositoryTest {
     @Autowired
     private DevicesRepository devicesRepository;
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
 
     @Test
     void save() {

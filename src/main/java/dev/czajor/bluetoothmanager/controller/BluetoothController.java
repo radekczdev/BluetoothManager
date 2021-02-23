@@ -3,6 +3,7 @@ package dev.czajor.bluetoothmanager.controller;
 import dev.czajor.bluetoothmanager.domain.Device;
 import dev.czajor.bluetoothmanager.mapper.DeviceMapper;
 import dev.czajor.bluetoothmanager.model.DeviceDto;
+import dev.czajor.bluetoothmanager.service.DevicesService;
 import dev.czajor.bluetoothmanager.service.SystemBluetoothService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +25,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 public class BluetoothController {
     private final SystemBluetoothService systemBluetoothService;
+    private final DevicesService devicesService;
     private final DeviceMapper mapper;
+
+    @GetMapping(value = "/devices/from-database",
+            produces = APPLICATION_JSON_VALUE)
+    public List<DeviceDto> getDevicesFromDatabase() {
+        return mapper.mapToDeviceDtos(devicesService.getAll());
+    }
 
     @GetMapping(value = "/devices",
             produces = APPLICATION_JSON_VALUE)
