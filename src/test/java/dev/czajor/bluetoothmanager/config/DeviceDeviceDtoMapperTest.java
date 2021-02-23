@@ -20,13 +20,14 @@ class DeviceDeviceDtoMapperTest {
     private BluetoothDevice bluetoothDevice;
 
     @Test
-    public void mapToDevice() {
+    void mapToDevice() {
         Device device = new Device(
                 bluetoothDevice,
                 "address",
                 "devClass",
                 123,
-                "type");
+                "type",
+                true);
         DeviceDto deviceDto = mapper.mapToDeviceDto(device);
         assertNotNull(deviceDto);
     }

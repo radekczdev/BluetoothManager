@@ -4,19 +4,17 @@ import lombok.*;
 import tinyb.BluetoothDevice;
 
 @Getter
-//@Setter
 @EqualsAndHashCode
-//@Component
 @AllArgsConstructor
-//@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Device {
-    private BluetoothDevice bluetoothDevice;
-    private String name;
-    private String address;
-    private int devClass;
-    private String type;
+    private final BluetoothDevice bluetoothDevice;
+    private final String name;
+    private final String address;
+    private final int devClass;
+    private final String type;
+    private final boolean connected;
 
-    public String getConnected() {
-        return bluetoothDevice.getConnected() ? "yes" : "no";
+    public boolean getConnected() {
+        return bluetoothDevice.getConnected();
     }
 }

@@ -24,14 +24,15 @@ public class AvailableDevicesService {
             logger.info("Starting to search devices...");
             tinyBInitializer.startDiscovery();
             List<BluetoothDevice> devicesRaw = Optional.ofNullable(tinyBInitializer.getDevices()).orElse(Collections.emptyList());
-            logger.info("Found " + devicesRaw.size() + " devices");
+            logger.info("Found {} devices", devicesRaw.size());
             devices = devicesRaw.stream()
                     .filter(Objects::nonNull)
                     .map(dev -> new Device(dev,
                             dev.getName(),
                             dev.getAddress(),
                             dev.getBluetoothClass(),
-                            dev.getBluetoothType().name()))
+                            dev.getBluetoothType().name(),
+                            dev.getConnected()))
                     .collect(Collectors.toList());
         } catch (BluetoothException exception) {
             logger.error("Error: ", exception);
@@ -43,11 +44,10 @@ public class AvailableDevicesService {
     }
 
     public void printDeviceInformation(Device device) {
-        System.out.println("Address = " + device.getAddress());
-        System.out.println(" Name = " + device.getName());
-        System.out.println(" Class = " + device.getClass());
-        System.out.println(" Type = " + device.getType());
-        System.out.println(" Connected = " + device.getConnected());
-        System.out.println();
+        logger.info("Address = {}", device.getAddress());
+        logger.info(" Name = {}", device.getName());
+        logger.info(" Class = {}", device.getClass());
+        logger.info(" Type = {}", device.getType());
+        logger.info(" Connected = {}", device.getConnected());
     }
 }
