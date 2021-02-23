@@ -4,9 +4,10 @@ import lombok.*;
 import tinyb.BluetoothDevice;
 
 @Getter
+@Builder
 @EqualsAndHashCode
 @AllArgsConstructor
-public class Device {
+public class Device implements BluetoothObject {
     private final BluetoothDevice bluetoothDevice;
     private final String name;
     private final String address;
