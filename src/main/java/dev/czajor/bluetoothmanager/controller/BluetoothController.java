@@ -24,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 public class BluetoothController {
     private final AvailableDevicesService availableDevicesService;
-    private final DeviceMapper mapper;//= Mappers.getMapper(DeviceDeviceDtoMapper.DeviceDeviceDtoMapper.class);
+    private final DeviceMapper mapper;
 
     @GetMapping(value = "/devices",
             produces = APPLICATION_JSON_VALUE)
