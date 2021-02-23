@@ -5,9 +5,9 @@ import tinyb.BluetoothDevice;
 
 @Getter
 @Builder
-@EqualsAndHashCode
+//@EqualsAndHashCode
 @AllArgsConstructor
-public class Device implements BluetoothObject {
+public class Device extends SerializationClass implements BluetoothObject{
     private final String name;
     private final String address;
     private final int devClass;
