@@ -5,6 +5,7 @@ import dev.czajor.bluetoothmanager.domain.Device;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Repository
-public class DevicesRepositoryInterface implements RepositoryInterface<Device> {
+public class DevicesRepository implements RepositoryInterface<Device> {
     private static final String DEVICES_DATABASE = "devices";
     private final HazelcastInstance devicesDatabase;
 
@@ -36,6 +37,11 @@ public class DevicesRepositoryInterface implements RepositoryInterface<Device> {
     public Optional<Device> findById(String address) {
         return Optional.ofNullable(
                 getDevicesMap().get(address));
+    }
+
+    @Override
+    public Optional<List<Device>> findAll() {
+        return Optional.of(new ArrayList<>(getDevicesMap().values()));
     }
 
     @Override

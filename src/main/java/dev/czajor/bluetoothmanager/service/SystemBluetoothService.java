@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AvailableDevicesService {
+public class SystemBluetoothService {
     private final TinyBInitializer tinyBInitializer;
-    Logger logger = LoggerFactory.getLogger(AvailableDevicesService.class);
+    Logger logger = LoggerFactory.getLogger(SystemBluetoothService.class);
 
-    public List<Device> getAll() {
+    public List<Device> getDiscoveredDevices() {
         List<Device> devices = new ArrayList<>();
         try {
             logger.info("Starting to search devices...");

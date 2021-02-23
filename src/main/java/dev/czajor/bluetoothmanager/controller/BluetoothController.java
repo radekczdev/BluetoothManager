@@ -3,7 +3,7 @@ package dev.czajor.bluetoothmanager.controller;
 import dev.czajor.bluetoothmanager.domain.Device;
 import dev.czajor.bluetoothmanager.mapper.DeviceMapper;
 import dev.czajor.bluetoothmanager.model.DeviceDto;
-import dev.czajor.bluetoothmanager.service.AvailableDevicesService;
+import dev.czajor.bluetoothmanager.service.SystemBluetoothService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class BluetoothController {
-    private final AvailableDevicesService availableDevicesService;
+    private final SystemBluetoothService systemBluetoothService;
     private final DeviceMapper mapper;
 
     @GetMapping(value = "/devices",
@@ -41,7 +41,7 @@ public class BluetoothController {
             }
 
         }));
-        List<Device> devices = availableDevicesService.getAll();
+        List<Device> devices = systemBluetoothService.getDiscoveredDevices();
         lock.lock();
         try {
             cv.await(1, TimeUnit.SECONDS);
