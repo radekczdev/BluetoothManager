@@ -14,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DevicesService {
     private final DevicesRepository devicesRepository;
+    private final ConnectionService connectionService;
 
     public void saveDevicesToRepository(List<Device> devices) {
         devices.forEach(devicesRepository::save);
@@ -29,7 +30,7 @@ public class DevicesService {
             throw new DeviceNotFoundException(
                     String.format("Device %s doesn't exist in database!", address));
         }
-        return ConnectionService.connect(device.get());
+        return connectionService.connect(device.get());
     }
 
 }

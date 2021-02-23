@@ -3,21 +3,33 @@ package dev.czajor.bluetoothmanager.service;
 import dev.czajor.bluetoothmanager.domain.Device;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tinyb.BluetoothException;
+import tinyb.BluetoothManager;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Service
 public class ConnectionService {
-    public static boolean connect(final Device device) throws BluetoothException {
-        return device.getBluetoothDevice().connect();
+    @Autowired
+    private final BluetoothManager bluetoothManager;
+
+    public boolean connect(final Device device) throws BluetoothException {
+        return bluetoothManager.getDevices().stream()
+                .filter(dev -> dev.getAddress().equals(device.getAddress()))
+                .findFirst().get().connect();
     }
 
-    public static boolean disconnect(final Device device) throws BluetoothException {
-        return device.getBluetoothDevice().disconnect();
+    public boolean disconnect(final Device device) throws BluetoothException {
+        return bluetoothManager.getDevices().stream()
+                .filter(dev -> dev.getAddress().equals(device.getAddress()))
+                .findFirst().get().disconnect();
     }
 
-    public static boolean isConnected(final Device device) throws BluetoothException {
-        return device.getBluetoothDevice().getConnected();
+    public boolean isConnected(final Device device) throws BluetoothException {
+        return bluetoothManager.getDevices().stream()
+                .filter(dev -> dev.getAddress().equals(device.getAddress()))
+                .findFirst().get().getConnected();
     }
 }

@@ -20,7 +20,6 @@ class DevicesRepositoryTest {
     @Test
     void save() {
         Device device = Device.builder()
-                .bluetoothDevice(null)
                 .address("TEST_ADDRESS")
                 .connected(true)
                 .devClass(123)

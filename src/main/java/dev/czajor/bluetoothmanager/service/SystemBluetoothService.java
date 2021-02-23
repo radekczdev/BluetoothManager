@@ -31,7 +31,7 @@ public class SystemBluetoothService {
             logger.info("Found {} devices", devicesRaw.size());
             devices = devicesRaw.stream()
                     .filter(Objects::nonNull)
-                    .map(dev -> new Device(dev,
+                    .map(dev -> new Device(
                             dev.getName(),
                             dev.getAddress(),
                             dev.getBluetoothClass(),
@@ -53,6 +53,6 @@ public class SystemBluetoothService {
         logger.info(" Name = {}", device.getName());
         logger.info(" Class = {}", device.getClass());
         logger.info(" Type = {}", device.getType());
-        logger.info(" Connected = {}", device.getConnected());
+        logger.info(" Connected = {}", device.isConnected());
     }
 }

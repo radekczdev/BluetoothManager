@@ -22,7 +22,6 @@ class DeviceDeviceDtoMapperTest {
     @Test
     void mapToDevice() {
         Device device = new Device(
-                bluetoothDevice,
                 "address",
                 "devClass",
                 123,
