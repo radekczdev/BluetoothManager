@@ -1,6 +1,7 @@
 package dev.czajor.bluetoothmanager.service;
 
 import dev.czajor.bluetoothmanager.domain.Device;
+import dev.czajor.bluetoothmanager.repository.DevicesRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import tinyb.BluetoothDevice;
 import tinyb.BluetoothException;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 import java.util.stream.Collectors;
@@ -16,8 +18,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SystemBluetoothService {
     private final TinyBInitializer tinyBInitializer;
+    private final DevicesService devicesService;
     Logger logger = LoggerFactory.getLogger(SystemBluetoothService.class);
 
+    @PostConstruct
     public List<Device> getDiscoveredDevices() {
         List<Device> devices = new ArrayList<>();
         try {
@@ -34,6 +38,7 @@ public class SystemBluetoothService {
                             dev.getBluetoothType().name(),
                             dev.getConnected()))
                     .collect(Collectors.toList());
+            devicesService.saveDevicesToRepository(devices);
         } catch (BluetoothException exception) {
             logger.error("Error: ", exception);
         }

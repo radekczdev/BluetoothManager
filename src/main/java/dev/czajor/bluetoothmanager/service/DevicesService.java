@@ -13,11 +13,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class DevicesService {
-    private final SystemBluetoothService systemBluetoothService;
     private final DevicesRepository devicesRepository;
 
-    public void saveDevicesToRepository() {
-        List<Device> devices = systemBluetoothService.getDiscoveredDevices();
+    public void saveDevicesToRepository(List<Device> devices) {
         devices.forEach(devicesRepository::save);
     }
 
