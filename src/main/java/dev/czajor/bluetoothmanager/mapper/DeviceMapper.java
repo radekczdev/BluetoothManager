@@ -16,7 +16,7 @@ public class DeviceMapper {
         return new DeviceDto(source.getName(),
                 source.getAddress(),
                 Integer.toString(source.getDevClass()),
-                source.getConnected() ? "yes" : "no",
+                source.isConnected() ? "yes" : "no",
                 source.getType());
     }
     public List<DeviceDto> mapToDeviceDtos(List<Device> source) {

@@ -47,7 +47,7 @@ public class DevicesRepository implements RepositoryInterface<Device> {
     @Override
     public Optional<List<Device>> findByConnectionStatus(boolean isConnected) {
         return Optional.of(getDevicesMap().values().stream()
-                .filter(device -> device.getConnected() == isConnected)
+                .filter(device -> device.isConnected() == isConnected)
                 .collect(Collectors.toList()));
     }
 }
