@@ -18,8 +18,7 @@ public class ConnectionService {
     private final BluetoothManager bluetoothManager;
     private final DevicesService devicesService;
 
-    public Device connect(final Device device) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
-        String address = device.getAddress();
+    public Device connect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
         getDevice(address).
                 orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOESN_T_EXIST)).
                 connect();

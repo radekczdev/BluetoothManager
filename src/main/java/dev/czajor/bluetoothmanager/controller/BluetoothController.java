@@ -35,10 +35,9 @@ public class BluetoothController {
         return mapper.mapToDeviceDtos(devicesService.refreshDatabase());
     }
 
-    @PutMapping(consumes = APPLICATION_JSON_VALUE,
-            produces = APPLICATION_JSON_VALUE)
-    public DeviceDto connectToDevice(DeviceDto deviceDto) throws CouldNotRemoveObjectsException, DeviceNotFoundException {
-        Device device = connectionService.connect(mapper.mapToDevice(deviceDto));
+    @PutMapping(produces = APPLICATION_JSON_VALUE)
+    public DeviceDto connectToDevice(@RequestParam String address) throws CouldNotRemoveObjectsException, DeviceNotFoundException {
+        Device device = connectionService.connect(address);
         return mapper.mapToDeviceDto(device);
     }
 }
