@@ -10,6 +10,7 @@ import tinyb.BluetoothDevice;
 import tinyb.BluetoothManager;
 
 import java.util.Optional;
+import java.util.concurrent.locks.ReentrantLock;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Service
@@ -17,12 +18,18 @@ public class ConnectionService {
     public static final String DEVICE_DOESN_T_EXIST = "Cannot connect - device doesn't exist";
     private final BluetoothManager bluetoothManager;
     private final DevicesService devicesService;
+    private final ReentrantLock lock = new ReentrantLock();
 
     public Device connect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
-        getDevice(address).
-                orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOESN_T_EXIST)).
-                connect();
-        devicesService.refreshDatabase();
+        lock.lock();
+        try {
+            getDevice(address).
+                    orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOESN_T_EXIST)).
+                    connect();
+            devicesService.refreshDatabase();
+        } finally {
+            lock.unlock();
+        }
         return devicesService.getByAddress(address);
     }
 

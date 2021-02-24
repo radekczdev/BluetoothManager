@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @RequiredArgsConstructor
 public class DevicesService {
     private final DevicesRepository devicesRepository;
     private final SystemBluetoothService systemBluetoothService;
+    private final ReentrantLock lock = new ReentrantLock();
 
     public void saveDevicesToRepository(List<Device> devices) {
         devices.forEach(devicesRepository::save);
@@ -23,8 +25,13 @@ public class DevicesService {
 
     @PostConstruct
     public List<Device> refreshDatabase() throws CouldNotRemoveObjectsException {
-        devicesRepository.deleteAll();
-        saveDevicesToRepository(systemBluetoothService.getDiscoveredDevices());
+        lock.lock();
+        try {
+            devicesRepository.deleteAll();
+            saveDevicesToRepository(systemBluetoothService.getDiscoveredDevices());
+        } finally {
+            lock.unlock();
+        }
         return devicesRepository.findAll().orElse(Collections.emptyList());
     }
 
