@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Service
 public class ConnectionService {
-    public static final String DEVICE_DOESN_T_EXIST = "Cannot connect - device doesn't exist";
+    public static final String DEVICE_DOES_NOT_EXIST = "Cannot connect - device doesn't exist";
     private final BluetoothManager bluetoothManager;
     private final DevicesService devicesService;
     private final ReentrantLock lock = new ReentrantLock();
@@ -24,7 +24,7 @@ public class ConnectionService {
         lock.lock();
         try {
             getDevice(address).
-                    orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOESN_T_EXIST)).
+                    orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
                     connect();
             devicesService.refreshDatabase();
         } finally {
@@ -34,20 +34,30 @@ public class ConnectionService {
     }
 
     public Device disconnect(final Device device) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
+        lock.lock();
         String address = device.getAddress();
-        getDevice(address).
-                orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOESN_T_EXIST)).
-                disconnect();
-        devicesService.refreshDatabase();
+        try {
+            getDevice(address).
+                    orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
+                    disconnect();
+            devicesService.refreshDatabase();
+        } finally {
+            lock.unlock();
+        }
         return devicesService.getByAddress(address);
     }
 
     public Device isConnected(final Device device) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
+        lock.lock();
         String address = device.getAddress();
-        getDevice(address).
-                orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOESN_T_EXIST)).
-                getConnected();
-        devicesService.refreshDatabase();
+        try {
+            getDevice(address).
+                    orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
+                    getConnected();
+            devicesService.refreshDatabase();
+        } finally {
+            lock.unlock();
+        }
         return devicesService.getByAddress(address);
     }
 
