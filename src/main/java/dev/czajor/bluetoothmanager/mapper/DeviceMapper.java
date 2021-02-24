@@ -12,6 +12,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DeviceMapper {
 
+    public Device mapToDevice(DeviceDto source) {
+        return new Device(source.getName(),
+                source.getAddress(),
+                Integer.parseInt(source.getDevClass()),
+                source.getType(),
+                source.getConnected().equals("yes")
+                );
+    }
+
     public DeviceDto mapToDeviceDto(Device source) {
         return new DeviceDto(source.getName(),
                 source.getAddress(),
@@ -19,6 +28,7 @@ public class DeviceMapper {
                 source.isConnected() ? "yes" : "no",
                 source.getType());
     }
+
     public List<DeviceDto> mapToDeviceDtos(List<Device> source) {
         return source.stream().map(this::mapToDeviceDto).collect(Collectors.toList());
     }

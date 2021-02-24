@@ -12,7 +12,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
-//@NoArgsConstructor
 @Service
 public class TinyBInitializer {
     private BluetoothManager bluetoothManager;

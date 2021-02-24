@@ -1,7 +1,6 @@
 package dev.czajor.bluetoothmanager.service;
 
 import dev.czajor.bluetoothmanager.domain.Device;
-import dev.czajor.bluetoothmanager.repository.DevicesRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import tinyb.BluetoothException;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
-
 import java.util.stream.Collectors;
 
 @Service

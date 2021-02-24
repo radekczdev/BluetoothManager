@@ -2,6 +2,7 @@ package dev.czajor.bluetoothmanager.repository;
 
 import com.hazelcast.core.HazelcastInstance;
 import dev.czajor.bluetoothmanager.domain.Device;
+import dev.czajor.bluetoothmanager.exception.CouldNotRemoveObjectsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -23,14 +24,22 @@ public class DevicesRepository implements RepositoryInterface<Device> {
 
     @Override
     public Optional<Device> save(Device device) {
-        return Optional.ofNullable(
-                getDevicesMap().putIfAbsent(device.getAddress(), device));
+        return Optional.of(
+                getDevicesMap().merge(device.getAddress(), device, (oldDev, newDev) -> newDev));
     }
 
     @Override
     public Optional<Device> delete(String address) {
         return Optional.ofNullable(
                 getDevicesMap().remove(address));
+    }
+
+    @Override
+    public void deleteAll() throws CouldNotRemoveObjectsException {
+        getDevicesMap().clear();
+        if (!getDevicesMap().isEmpty()) {
+            throw new CouldNotRemoveObjectsException("Devices map is not empty!");
+        }
     }
 
     @Override
