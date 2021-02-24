@@ -33,9 +33,8 @@ public class ConnectionService {
         return devicesService.getByAddress(address);
     }
 
-    public Device disconnect(final Device device) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
+    public Device disconnect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
         lock.lock();
-        String address = device.getAddress();
         try {
             getDevice(address).
                     orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
@@ -47,9 +46,8 @@ public class ConnectionService {
         return devicesService.getByAddress(address);
     }
 
-    public Device isConnected(final Device device) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
+    public Device isConnected(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
         lock.lock();
-        String address = device.getAddress();
         try {
             getDevice(address).
                     orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
@@ -61,7 +59,7 @@ public class ConnectionService {
         return devicesService.getByAddress(address);
     }
 
-    public Optional<BluetoothDevice> getDevice(String address) {
+    public Optional<BluetoothDevice> getDevice(final String address) {
         return bluetoothManager.getDevices().stream()
                 .filter(dev -> dev.getAddress().equals(address))
                 .findFirst();
