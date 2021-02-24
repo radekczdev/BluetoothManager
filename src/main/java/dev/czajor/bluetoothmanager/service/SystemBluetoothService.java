@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import tinyb.BluetoothDevice;
 import tinyb.BluetoothException;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,10 +15,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SystemBluetoothService {
     private final TinyBInitializer tinyBInitializer;
-    private final DevicesService devicesService;
     Logger logger = LoggerFactory.getLogger(SystemBluetoothService.class);
 
-    @PostConstruct
     public List<Device> getDiscoveredDevices() {
         List<Device> devices = new ArrayList<>();
         try {
@@ -36,11 +33,9 @@ public class SystemBluetoothService {
                             dev.getBluetoothType().name(),
                             dev.getConnected()))
                     .collect(Collectors.toList());
-            devicesService.saveDevicesToRepository(devices);
         } catch (BluetoothException exception) {
             logger.error("Error: ", exception);
-        }
-        finally {
+        } finally {
             tinyBInitializer.stopDiscovery();
         }
         return devices;

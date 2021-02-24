@@ -7,6 +7,7 @@ import dev.czajor.bluetoothmanager.repository.DevicesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,10 +21,10 @@ public class DevicesService {
         devices.forEach(devicesRepository::save);
     }
 
+    @PostConstruct
     public List<Device> refreshDatabase() throws CouldNotRemoveObjectsException {
         devicesRepository.deleteAll();
-        systemBluetoothService.getDiscoveredDevices()
-                .forEach(devicesRepository::save);
+        saveDevicesToRepository(systemBluetoothService.getDiscoveredDevices());
         return devicesRepository.findAll().orElse(Collections.emptyList());
     }
 

@@ -20,7 +20,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class BluetoothController {
-    private final SystemBluetoothService systemBluetoothService;
     private final DevicesService devicesService;
     private final ConnectionService connectionService;
     private final DeviceMapper mapper;
