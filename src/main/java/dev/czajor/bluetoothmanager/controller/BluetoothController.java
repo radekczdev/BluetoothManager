@@ -1,53 +1,51 @@
 package dev.czajor.bluetoothmanager.controller;
 
 import dev.czajor.bluetoothmanager.domain.Device;
+import dev.czajor.bluetoothmanager.exception.CouldNotRemoveObjectsException;
+import dev.czajor.bluetoothmanager.exception.DeviceNotFoundException;
 import dev.czajor.bluetoothmanager.mapper.DeviceMapper;
 import dev.czajor.bluetoothmanager.model.DeviceDto;
-import dev.czajor.bluetoothmanager.service.AvailableDevicesService;
+import dev.czajor.bluetoothmanager.service.ConnectionService;
+import dev.czajor.bluetoothmanager.service.DevicesService;
+import dev.czajor.bluetoothmanager.service.SystemBluetoothService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(path = "/")
+@RequestMapping(path = "/devices")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class BluetoothController {
-    private final AvailableDevicesService availableDevicesService;
+    private final DevicesService devicesService;
+    private final ConnectionService connectionService;
     private final DeviceMapper mapper;
 
-    @GetMapping(value = "/devices",
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public List<DeviceDto> getDevicesFromDatabase() {
+        return mapper.mapToDeviceDtos(devicesService.getAll());
+    }
+
+    @GetMapping(value = "/refresh",
             produces = APPLICATION_JSON_VALUE)
-    public List<DeviceDto> getDevices() throws InterruptedException {
-        final Lock lock = new ReentrantLock();
-        final Condition cv = lock.newCondition();
+    public List<DeviceDto> refreshDevices() throws CouldNotRemoveObjectsException {
+        return mapper.mapToDeviceDtos(devicesService.refreshDatabase());
+    }
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            lock.lock();
-            try {
-                cv.signalAll();
-            } finally {
-                lock.unlock();
-            }
+    @PutMapping(value = "/connect",
+            produces = APPLICATION_JSON_VALUE)
+    public DeviceDto connectToDevice(@RequestParam String address) throws CouldNotRemoveObjectsException, DeviceNotFoundException {
+        Device device = connectionService.connect(address);
+        return mapper.mapToDeviceDto(device);
+    }
 
-        }));
-        List<Device> devices = availableDevicesService.getAll();
-        lock.lock();
-        try {
-            cv.await(1, TimeUnit.SECONDS);
-        } finally {
-            lock.unlock();
-        }
-        return mapper.mapToDeviceDtos(devices);
+    @PutMapping(value = "/disconnect",
+            produces = APPLICATION_JSON_VALUE)
+    public DeviceDto disconnectFromDevice(@RequestParam String address) throws CouldNotRemoveObjectsException, DeviceNotFoundException {
+        Device device = connectionService.disconnect(address);
+        return mapper.mapToDeviceDto(device);
     }
 }

@@ -1,23 +1,67 @@
 package dev.czajor.bluetoothmanager.service;
 
 import dev.czajor.bluetoothmanager.domain.Device;
+import dev.czajor.bluetoothmanager.exception.CouldNotRemoveObjectsException;
+import dev.czajor.bluetoothmanager.exception.DeviceNotFoundException;
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import tinyb.BluetoothException;
+import tinyb.BluetoothDevice;
+import tinyb.BluetoothManager;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+import java.util.Optional;
+import java.util.concurrent.locks.ReentrantLock;
+
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Service
 public class ConnectionService {
-    public static boolean connect(final Device device) throws BluetoothException {
-        return device.getBluetoothDevice().connect();
+    public static final String DEVICE_DOES_NOT_EXIST = "Cannot connect - device doesn't exist";
+    private final BluetoothManager bluetoothManager;
+    private final DevicesService devicesService;
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public Device connect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
+        lock.lock();
+        try {
+            getDevice(address).
+                    orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
+                    connect();
+            devicesService.refreshDatabase();
+        } finally {
+            lock.unlock();
+        }
+        return devicesService.getByAddress(address);
     }
 
-    public static boolean disconnect(final Device device) throws BluetoothException {
-        return device.getBluetoothDevice().disconnect();
+    public Device disconnect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
+        lock.lock();
+        try {
+            getDevice(address).
+                    orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
+                    disconnect();
+            devicesService.refreshDatabase();
+        } finally {
+            lock.unlock();
+        }
+        return devicesService.getByAddress(address);
     }
 
-    public static boolean isConnected(final Device device) throws BluetoothException {
-        return device.getBluetoothDevice().getConnected();
+    public Device isConnected(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
+        lock.lock();
+        try {
+            getDevice(address).
+                    orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
+                    getConnected();
+            devicesService.refreshDatabase();
+        } finally {
+            lock.unlock();
+        }
+        return devicesService.getByAddress(address);
+    }
+
+    public Optional<BluetoothDevice> getDevice(final String address) {
+        return bluetoothManager.getDevices().stream()
+                .filter(dev -> dev.getAddress().equals(address))
+                .findFirst();
     }
 }
