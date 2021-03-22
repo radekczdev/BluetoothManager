@@ -20,6 +20,6 @@ public interface DevicesRepository extends CrudRepository<Device, String> {
     @Override
     List<Device> findAll();
 
-    List<Device> findAllByIsConnected(boolean connected);
+    List<Device> findAllByConnected(boolean connected);
 
 }
