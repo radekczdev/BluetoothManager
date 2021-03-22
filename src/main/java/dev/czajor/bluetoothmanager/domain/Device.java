@@ -5,9 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 
+import javax.persistence.Entity;
+
 @Getter
 @Builder
 @AllArgsConstructor
+@Entity
 public class Device extends SerializationClass implements BluetoothObject {
     private final String name;
     @Id
