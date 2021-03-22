@@ -23,10 +23,12 @@ public class ConnectionService {
     public Device connect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
         lock.lock();
         try {
-            getDevice(address).
-                    orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
-                    connect();
             devicesService.refreshDatabase();
+            if(!isConnected(address)) {
+                getDevice(address).
+                        orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
+                        connect();
+            }
         } finally {
             lock.unlock();
         }
@@ -36,27 +38,30 @@ public class ConnectionService {
     public Device disconnect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
         lock.lock();
         try {
-            getDevice(address).
-                    orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
-                    disconnect();
             devicesService.refreshDatabase();
+            if(isConnected(address)) {
+                getDevice(address).
+                        orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
+                        disconnect();
+            }
         } finally {
             lock.unlock();
         }
         return devicesService.getByAddress(address);
     }
 
-    public Device isConnected(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
+    public boolean isConnected(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
         lock.lock();
+        boolean isConnected;
         try {
-            getDevice(address).
+            devicesService.refreshDatabase();
+            isConnected = getDevice(address).
                     orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
                     getConnected();
-            devicesService.refreshDatabase();
         } finally {
             lock.unlock();
         }
-        return devicesService.getByAddress(address);
+        return isConnected;
     }
 
     public Optional<BluetoothDevice> getDevice(final String address) {
