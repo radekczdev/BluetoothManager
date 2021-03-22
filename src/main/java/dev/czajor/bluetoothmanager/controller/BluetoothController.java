@@ -7,7 +7,6 @@ import dev.czajor.bluetoothmanager.mapper.DeviceMapper;
 import dev.czajor.bluetoothmanager.model.DeviceDto;
 import dev.czajor.bluetoothmanager.service.ConnectionService;
 import dev.czajor.bluetoothmanager.service.DevicesService;
-import dev.czajor.bluetoothmanager.service.SystemBluetoothService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
