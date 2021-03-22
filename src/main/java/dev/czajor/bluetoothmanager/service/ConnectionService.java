@@ -23,12 +23,12 @@ public class ConnectionService {
     public Device connect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
         lock.lock();
         try {
-            devicesService.refreshDatabase();
             if(!isConnected(address)) {
                 getDevice(address).
                         orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
                         connect();
             }
+            devicesService.refreshDatabase();
         } finally {
             lock.unlock();
         }
@@ -38,12 +38,12 @@ public class ConnectionService {
     public Device disconnect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
         lock.lock();
         try {
-            devicesService.refreshDatabase();
             if(isConnected(address)) {
                 getDevice(address).
                         orElseThrow(() -> new DeviceNotFoundException(DEVICE_DOES_NOT_EXIST)).
                         disconnect();
             }
+            devicesService.refreshDatabase();
         } finally {
             lock.unlock();
         }
