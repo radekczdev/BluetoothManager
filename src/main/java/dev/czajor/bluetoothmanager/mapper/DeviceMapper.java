@@ -1,7 +1,7 @@
 package dev.czajor.bluetoothmanager.mapper;
 
-import dev.czajor.bluetoothmanager.model.DeviceDto;
 import dev.czajor.bluetoothmanager.domain.Device;
+import dev.czajor.bluetoothmanager.model.DeviceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +17,9 @@ public class DeviceMapper {
                 source.getAddress(),
                 Integer.parseInt(source.getDevClass()),
                 source.getType(),
-                source.getConnected().equals("yes")
-                );
+                source.getConnected().equals("yes"),
+                source.isPaired()
+        );
     }
 
     public DeviceDto mapToDeviceDto(Device source) {
@@ -26,7 +27,9 @@ public class DeviceMapper {
                 source.getAddress(),
                 Integer.toString(source.getDevClass()),
                 source.isConnected() ? "yes" : "no",
-                source.getType());
+                source.getType(),
+                source.isPaired()
+        );
     }
 
     public List<DeviceDto> mapToDeviceDtos(List<Device> source) {

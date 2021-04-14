@@ -13,4 +13,5 @@ public class DeviceDto {
    private String devClass;
    private String connected;
    private String type;
+   private boolean isPaired;
 }
