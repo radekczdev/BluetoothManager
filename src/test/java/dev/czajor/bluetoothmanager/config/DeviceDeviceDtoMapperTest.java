@@ -26,6 +26,7 @@ class DeviceDeviceDtoMapperTest {
                 "devClass",
                 123,
                 "type",
+                true,
                 true);
         DeviceDto deviceDto = mapper.mapToDeviceDto(device);
         assertNotNull(deviceDto);
