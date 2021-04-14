@@ -2,6 +2,7 @@ package dev.czajor.bluetoothmanager.controller;
 
 import dev.czajor.bluetoothmanager.domain.Device;
 import dev.czajor.bluetoothmanager.exception.CouldNotRemoveObjectsException;
+import dev.czajor.bluetoothmanager.exception.DeviceNotConnectedException;
 import dev.czajor.bluetoothmanager.exception.DeviceNotFoundException;
 import dev.czajor.bluetoothmanager.mapper.DeviceMapper;
 import dev.czajor.bluetoothmanager.model.DeviceDto;
@@ -49,7 +50,7 @@ public class BluetoothController {
 
     @PutMapping(value = "/disconnect/{address}",
             produces = APPLICATION_JSON_VALUE)
-    public DeviceDto disconnectFromDevice(@PathVariable String address) throws CouldNotRemoveObjectsException, DeviceNotFoundException {
+    public DeviceDto disconnectFromDevice(@PathVariable String address) throws CouldNotRemoveObjectsException, DeviceNotFoundException, DeviceNotConnectedException {
         Device device = connectionService.disconnect(address);
         return mapper.mapToDeviceDto(device);
     }
