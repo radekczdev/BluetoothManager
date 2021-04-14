@@ -20,4 +20,5 @@ public class Device implements BluetoothObject {
     private int devClass;
     private String type;
     private boolean connected;
+    private boolean isPaired;
 }

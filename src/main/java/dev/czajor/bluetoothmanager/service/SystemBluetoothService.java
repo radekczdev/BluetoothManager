@@ -31,14 +31,23 @@ public class SystemBluetoothService {
                             dev.getAddress(),
                             dev.getBluetoothClass(),
                             dev.getBluetoothType().name(),
-                            dev.getConnected()))
+                            dev.getConnected(),
+                            dev.getPaired()))
                     .collect(Collectors.toList());
+            devices.forEach(this::printDeviceInformation);
         } catch (BluetoothException exception) {
             logger.error("Error: ", exception);
         } finally {
             tinyBInitializer.stopDiscovery();
         }
         return devices;
+    }
+
+    public List<Device> getPairedDevices() {
+        return this.getDiscoveredDevices().
+                stream().
+                filter(Device::isPaired).
+                collect(Collectors.toList());
     }
 
     public void printDeviceInformation(Device device) {

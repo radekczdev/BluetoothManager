@@ -37,6 +37,10 @@ public class DevicesService {
         return devicesRepository.findAll();
     }
 
+    public List<Device> getPaired() {
+        return systemBluetoothService.getPairedDevices();
+    }
+
     public Device getByAddress(String address) throws DeviceNotFoundException {
         return devicesRepository.findById(address).orElseThrow(
                 () -> new DeviceNotFoundException(String.format("Device with address %s doesn't exist in database", address)));
