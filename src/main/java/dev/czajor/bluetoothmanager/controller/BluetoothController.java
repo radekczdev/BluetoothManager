@@ -31,7 +31,7 @@ public class BluetoothController {
 
     @GetMapping(value = "/refresh",
             produces = APPLICATION_JSON_VALUE)
-    public List<DeviceDto> refreshDevices() throws CouldNotRemoveObjectsException {
+    public List<DeviceDto> refreshDevices() {
         return mapper.mapToDeviceDtos(devicesService.refreshDatabase());
     }
 
@@ -43,14 +43,14 @@ public class BluetoothController {
 
     @PutMapping(value = "/connect/{address}",
             produces = APPLICATION_JSON_VALUE)
-    public DeviceDto connectToDevice(@PathVariable String address) throws CouldNotRemoveObjectsException, DeviceNotFoundException {
+    public DeviceDto connectToDevice(@PathVariable String address) throws DeviceNotFoundException {
         Device device = connectionService.connect(address);
         return mapper.mapToDeviceDto(device);
     }
 
     @PutMapping(value = "/disconnect/{address}",
             produces = APPLICATION_JSON_VALUE)
-    public DeviceDto disconnectFromDevice(@PathVariable String address) throws CouldNotRemoveObjectsException, DeviceNotFoundException, DeviceNotConnectedException {
+    public DeviceDto disconnectFromDevice(@PathVariable String address) throws DeviceNotFoundException, DeviceNotConnectedException {
         Device device = connectionService.disconnect(address);
         return mapper.mapToDeviceDto(device);
     }

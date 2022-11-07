@@ -1,7 +1,6 @@
 package dev.czajor.bluetoothmanager.service;
 
 import dev.czajor.bluetoothmanager.domain.Device;
-import dev.czajor.bluetoothmanager.exception.CouldNotRemoveObjectsException;
 import dev.czajor.bluetoothmanager.exception.DeviceNotConnectedException;
 import dev.czajor.bluetoothmanager.exception.DeviceNotFoundException;
 import lombok.AccessLevel;
@@ -22,7 +21,7 @@ public class ConnectionService {
     private final DevicesService devicesService;
     private final ReentrantLock lock = new ReentrantLock();
 
-    public Device connect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException {
+    public Device connect(final String address) throws DeviceNotFoundException {
         lock.lock();
         try {
             if (!isConnected(address)) {
@@ -37,7 +36,7 @@ public class ConnectionService {
         return devicesService.getByAddress(address);
     }
 
-    public Device disconnect(final String address) throws DeviceNotFoundException, CouldNotRemoveObjectsException, DeviceNotConnectedException {
+    public Device disconnect(final String address) throws DeviceNotFoundException, DeviceNotConnectedException {
         lock.lock();
         try {
             if (isConnected(address)) {
